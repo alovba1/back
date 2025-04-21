@@ -2,21 +2,23 @@ pipeline {
     agent any
 
     stages {
+        stage('Setup Node Environment') {
+            steps {
+                withEnv(["PATH=C:\\laragon\\bin\\nodejs\\node-v18\\bin;${env.PATH}"]) {
+                    bat 'node --version'
+                    bat 'npm --version'
+                }
+            }
+        }
 
         stage('Check Environment') {
             steps {
-                bat 'echo $PATH'
+                bat 'echo %PATH%'
                 bat 'node --version'
                 bat 'npm --version'
             }
         }
-/*
-        stage('Install Dependencies') {
-            steps {
-                bat 'npm install'
-            }
-        }
-*/
+
         stage('Run Tests') {
             steps {
                 bat 'npm test'
