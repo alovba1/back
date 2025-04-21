@@ -2,14 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Setup Node Environment') {
-            steps {
-                withEnv(["PATH=C:\\laragon\\bin\\nodejs\\node-v18\\bin;${env.PATH}"]) {
-                    bat 'node --version'
-                    bat 'npm --version'
-                }
-            }
-        }
+      
 
         stage('Check Environment') {
             steps {
