@@ -4,6 +4,15 @@ pipeline {
     stages {
       
 
+        stage('Setup Node.js Environment') {
+            steps {
+                withEnv(["PATH=C:\\Program Files\\nodejs;${env.PATH}"]) {
+                    bat 'node --version'
+                    bat 'npm --version'
+                }
+            }
+        }
+
         stage('Check Environment') {
             steps {
                 bat 'echo %PATH%'
