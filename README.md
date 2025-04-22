@@ -32,6 +32,9 @@ Configuracion en la plataforma de Jenkins:
 
  Jenkinsfile
 
+![Descripción de la imagen](images/image.png)
+
+
 1.1 **Creacion del Archivo Jenkinsfile dentro del proyecto back:**
 
 pipeline {
@@ -129,13 +132,18 @@ Fue diseñado para asegurar calidad desde etapas tempranas, reducir errores y fa
 
 ## ▪ Cómo ejecutar localmente y probar el despliegue.
 
-1. Clona el repositorio:
-   bash
+1. **Clona el repositorio del back:**
    git clone https://github.com/alovba1/back.git
-   cd tu-repo
-Construye el proyecto:
-
-bash
+   cd back
+  **ejecutar el proyecto en una terminal ej visual studio code**
+   npm start
+**indica que el proyecto esta ejecutando en:**
+Servidor corriendo en http://localhost:3000
+**url comprobar que fuciona:**
+http://localhost:3000/api/message
+2. **Clona el repositorio front:**
+ bash
+ git clone https://github.com/alovba1/back.git
 Copiar
 Editar
 ./gradlew build
