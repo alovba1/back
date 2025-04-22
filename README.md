@@ -3,7 +3,9 @@
 ## ▪  Estructura del Pipeline
 
 Este pipeline está compuesto por las siguientes etapas:
+
 Configuracion en la plataforma de Jenkins:
+
 1. **Construcción (Build):**
 
  Crear la tarea en jenkins
@@ -14,13 +16,14 @@ Configuracion en la plataforma de Jenkins:
 
  Triggers:
 
- GitHub hook trigger for GITScm polling
+ seleccionar GitHub hook trigger for GITScm polling
 
  Definition:
 
- Pipeline script from 
+ seleccionar Pipeline script from 
 
- SMC:Git
+ SMC: 
+ seleccionar Git
 
  Repository URL: https://github.com/alovba1/back.git
 
@@ -127,24 +130,111 @@ HEALTHCHECK --interval=10s --timeout=5s --start-period=5s \
 CMD curl -f http://localhost:3000/api/message || exit 1
 
 
+5. **Gestión ante fallos o errores (rollback o alertas).**
+
+
 > **¿ por qué fue diseñado así?**  
 Fue diseñado para asegurar calidad desde etapas tempranas, reducir errores y facilitar el despliegue continuo.
 
-## ▪ Cómo ejecutar localmente y probar el despliegue.
+## ▪ Cómo ejecutar localmente.
 
-1. **Clona el repositorio del back:**
+1. **Clona el repositorio del back ej en una consola de gitbush:**
+
    git clone https://github.com/alovba1/back.git
+
    cd back
-  **ejecutar el proyecto en una terminal ej visual studio code**
+
+  **ejecutar el proyecto en una consola  ej visual studio code**
+
    npm start
+
 **indica que el proyecto esta ejecutando en:**
+
 Servidor corriendo en http://localhost:3000
+
 **url comprobar que fuciona:**
+
 http://localhost:3000/api/message
-2. **Clona el repositorio front:**
- bash
- git clone https://github.com/alovba1/back.git
-Copiar
+
+2. **Clona el repositorio front ej en una consola de gitbush:**
+
+git clone https://github.com/alovba1/front.git
+
+cd front
+
+  **ejecutar el proyecto en una consola  ej visual studio code**
+  ng serve
+
+  Angular servidor corriendo en http://localhost:4200/ 
+
+  **url comprobar que fuciona:**
+
+http://localhost:4200/ 
+
+## ▪ Probar el despliegue
+
+instalar Jenkins localmente
+
+Accede a: http://localhost:8080
+
+Por ejemplo: 
+
+Usuario: admin
+
+Contraseña: admin
+
+Configuracion en la plataforma de Jenkins:
+
+ Crear la tarea en jenkins
+
+ crear le pipeline
+
+ configurar el pipeline:
+
+ Triggers:
+
+ GitHub hook trigger for GITScm polling
+
+ Definition:
+
+ Pipeline script from 
+
+ SMC:Git
+
+ Repository URL: https://github.com/alovba1/back.git
+
+ Branch Specifier (blank for 'any'):
+
+ */main
+
+ Script Path:
+
+ Jenkinsfile
+
+ **ejecutar el pipeline:**
+seleccionar el pipeline creado
+
+ejecutar el pipeline creado
+
+seleccionar el # de Build ejecutando
+
+ **Ver el resultado de Log:**
+
+seleccionar la opcion Console Output
+
+ **Comprobar la creacion de la imagen y el contenedor:**
+
+ejutar el comando: 
+
+docker search ej: backend-image:latest
+
+otra forma: ir a https://hub.docker.com/
+
+usa la barra de búsqueda para encontrar imágen.
+
+en la cuadro de texto buscar la imagen ej: backend-image:latest
+
+
 Editar
 ./gradlew build
 Crea la imagen Docker:
