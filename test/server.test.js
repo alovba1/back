@@ -18,7 +18,7 @@ beforeAll(async () => {
 afterAll(async () => {
     if (server) {
         await new Promise(resolve => server.close(resolve)); // Cierra correctamente el servidor
-        console.log('🚀 Servidor cerrado después de las pruebas.');
+        console.log('Servidor cerrado después de las pruebas.');
     }
 });
 
