@@ -21,6 +21,7 @@ pipeline {
             }
         }
 
+
 stage('Run Tests') {
     steps {
         // Instalar dependencias necesarias antes de iniciar el servidor
@@ -29,8 +30,10 @@ stage('Run Tests') {
         // Iniciar el servidor en segundo plano
         bat 'start /B node server.js'
 
-        // Esperar unos segundos para asegurar que el servicio arranque correctamente
-        bat 'timeout /t 5'
+        // Esperar unos segundos de manera compatible con Jenkins
+        script {
+            sleep(5)
+        }
 
         // Ejecutar los tests y capturar errores sin detener el pipeline
         script {
@@ -44,6 +47,7 @@ stage('Run Tests') {
         bat 'taskkill /F /IM node.exe || echo "No se encontró el servidor para detener"'
     }
 }
+
 
 
   stage('Build') {
