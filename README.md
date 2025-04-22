@@ -202,6 +202,9 @@ Servidor corriendo en http://localhost:3000
 http://localhost:3000/api/message
 
 ![Descripción de la imagen](images/Proyectoback.png)
+![Descripción de la imagen](images/Estructuraproyecto.png)
+
+
 
 2. **Clona el repositorio front ej en una consola de gitbush:**
 
@@ -219,6 +222,7 @@ cd front
 http://localhost:4200/ 
 
 ![Descripción de la imagen](images/Proyectofront.png)
+![Descripción de la imagen](images/Estructuraproyectofront.png)
 
 ## ▪ Probar el despliegue
 

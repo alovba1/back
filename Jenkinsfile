@@ -77,12 +77,22 @@ stage('Run Tests') {
 
     }
 
-    post {
-        success {
-            echo 'Backend pipeline completed successfully!'
+  post {
+    failure {
+        echo "Error en el pipeline, realizando rollback..."
+
+        // Detener el contenedor fallido si está corriendo
+        script {
+            bat 'docker stop backend-container || echo "No hay contenedor en ejecución para detener"'
+            bat 'docker rm backend-container || echo "No se encontró el contenedor para eliminar"'
         }
-       failure {
-         echo "Error en el pipeline, revisar logs en Jenkins."
+
+        // Restaurar versión anterior del backend con la imagen previa
+        script {
+            bat 'docker run -d -p 3000:3000 --name backend-container backend-image:previous'
+        }
+
+        echo "Rollback completado exitosamente."
     }
-    }
+}
 }
