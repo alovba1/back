@@ -8,7 +8,7 @@ jest.setTimeout(20000);
 
 beforeAll(async () => {
     server = app.listen(3000, () => {
-        console.log('✅ Servidor corriendo en http://localhost:3000');
+        console.log('Servidor corriendo en http://localhost:3000');
     });
 
     // Esperar unos segundos para asegurar que el servidor esté completamente listo
