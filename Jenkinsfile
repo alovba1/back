@@ -27,12 +27,21 @@ stage('Run Tests') {
         // Instalar dependencias necesarias antes de iniciar el servidor
         bat 'npm install'
 
-        // Iniciar el servidor en segundo plano
-        bat 'start /B node server.js'
+        // Iniciar el servidor en segundo plano y guardar salida en un log
+        bat 'start /B node server.js > server.log 2>&1'
 
-        // Esperar unos segundos de manera compatible con Jenkins
+        // Esperar unos segundos para asegurar que el servicio arranque correctamente
         script {
             sleep(5)
+        }
+
+        // Verificar que el servidor realmente se inició
+        script {
+            def serverRunning = bat(script: "netstat -ano | findstr :3000", returnStatus: true)
+            if (serverRunning != 0) {
+                echo "Error: El servidor no está corriendo, cancelando pruebas..."
+                error("El servidor no se inició correctamente.")
+            }
         }
 
         // Ejecutar los tests y capturar errores sin detener el pipeline
@@ -47,6 +56,7 @@ stage('Run Tests') {
         bat 'taskkill /F /IM node.exe || echo "No se encontró el servidor para detener"'
     }
 }
+
 
 
 
