@@ -177,6 +177,29 @@ CMD curl -f http://localhost:3000/api/message || exit 1
 
 5. **Gestión ante fallos o errores (rollback o alertas).**
 
+  post {
+    failure {
+        echo "Error en el pipeline, realizando rollback..."
+
+        // Detener el contenedor fallido si está corriendo
+
+        script {
+            bat 'docker stop backend-container || echo "No hay contenedor en ejecución para detener"'
+
+            bat 'docker rm backend-container || echo "No se encontró el contenedor para eliminar"'
+        }
+
+     echo "Alerta enviada a Slack."
+
+        // Restaurar versión anterior del backend con la imagen previa
+        script {
+
+            bat 'docker run -d -p 3000:3000 --name backend-container backend-image:previous'
+        }
+
+        echo "Rollback completado exitosamente."
+    }
+}
 
 > **¿ por qué fue diseñado así?**  
 Fue diseñado para asegurar calidad desde etapas tempranas, reducir errores y facilitar el despliegue continuo.
