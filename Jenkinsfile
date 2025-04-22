@@ -52,8 +52,7 @@ stage('Run Tests') {
             }
         }
 
-        // Detener el servidor después de los tests
-        bat 'taskkill /F /IM node.exe || echo "No se encontró el servidor para detener"'
+        // Eliminar "taskkill" porque Jest ya está cerrando el servidor en afterAll()
     }
 }
 
