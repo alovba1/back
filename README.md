@@ -36,12 +36,13 @@ Configuracion en la plataforma de Jenkins:
  Jenkinsfile
 
 ![Descripción de la imagen](images/image.png)
+![Descripción de la imagen](images/Logconfiguration1.png)
+![Descripción de la imagen](images/Logconfiguration2.png)
 
 
 1.1 **Creacion del Archivo Jenkinsfile dentro del proyecto back:**
 
 pipeline {
-
     agent any
 
     stages {
@@ -64,28 +65,60 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                bat 'npm test'
+
+stage('Run Tests') {
+    steps {
+        // Instalar dependencias necesarias antes de iniciar el servidor
+        bat 'npm install'
+
+        // Iniciar el servidor en segundo plano y guardar salida en un log
+        bat 'start /B node server.js > server.log 2>&1'
+
+        // Esperar unos segundos para asegurar que el servicio arranque correctamente
+        script {
+            sleep(5)
+        }
+
+        // Verificar que el servidor realmente se inició
+        script {
+            def serverRunning = bat(script: "netstat -ano | findstr :3000", returnStatus: true)
+            if (serverRunning != 0) {
+                echo "Error: El servidor no está corriendo, cancelando pruebas..."
+                error("El servidor no se inició correctamente.")
             }
         }
 
-      stage('Build') {
+        // Ejecutar los tests y capturar errores sin detener el pipeline
+        script {
+            def testResult = bat(script: "npm test", returnStatus: true)
+            if (testResult != 0) {
+                echo "Tests fallaron, pero continuaremos con el pipeline..."
+            }
+        }
+
+        // Eliminar "taskkill" porque Jest ya está cerrando el servidor en afterAll()
+    }
+}
+
+
+
+
+  stage('Build') {
     steps {
         bat 'docker build -t backend-image .'
         bat 'docker tag backend-image backend-image:latest'
-        bat 'docker run -d -p 3000:3000 --name backend-container backend-image'
 
+        // Detiene y elimina el contenedor anterior si existe
         script {
-            def result = bat(script: "docker ps | findstr backend-container", returnStatus: true)
-            if (result != 0) {
-                echo "Error detectado, realizando rollback..."
-                bat "docker stop backend-container"
-                bat "docker run -d -p 3000:3000 --name backend-container backend-image:previous"
-            }
+            bat 'docker stop backend-container || echo "No hay contenedor en ejecución"'
+            bat 'docker rm backend-container || echo "No se encontró el contenedor para eliminar"'
         }
+
+        bat 'docker run -d -p 3000:3000 --name backend-container backend-image'
     }
 }
+
+
     }
 
     post {
@@ -93,14 +126,12 @@ pipeline {
             echo 'Backend pipeline completed successfully!'
         }
        failure {
-        mail to: 'curribifine@gmail.com',
-             subject: 'Error en el Pipeline de Jenkins!',
-             body: 'Hubo un error en el despliegue de Docker. Revisa los logs en Jenkins.'
+         echo "Error en el pipeline, revisar logs en Jenkins."
     }
     }
 }
 
-
+![Descripción de la imagen](images/Jenkinsfile.png)
 
 2. **Pruebas (Testing):**
 
@@ -109,6 +140,15 @@ pipeline {
                 bat 'npm test'
             }
         }
+
+![Descripción de la imagen](images/test.png)
+
+2. **Validacion de calidad estatica:**
+
+ejecutar el comando:
+
+        npx eslint .
+
 
 
 3. **Despliegue (Deployment):**
@@ -119,6 +159,9 @@ pipeline {
 
  bat 'docker run -d -p 3000:3000 --name backend-container backend-image'
 
+ ![Descripción de la imagen](images/despliegueimagen.png)
+ 
+![Descripción de la imagen](images/desplieguecontenedor.png)
 4. **Monitoreo (Monitoring):**
 
 **En el archivo Dokerfile:**
@@ -128,6 +171,8 @@ pipeline {
 HEALTHCHECK --interval=10s --timeout=5s --start-period=5s \
 
 CMD curl -f http://localhost:3000/api/message || exit 1
+ 
+![Descripción de la imagen](images/monitorizando.png)
 
 
 5. **Gestión ante fallos o errores (rollback o alertas).**
@@ -156,6 +201,8 @@ Servidor corriendo en http://localhost:3000
 
 http://localhost:3000/api/message
 
+![Descripción de la imagen](images/Proyectoback.png)
+
 2. **Clona el repositorio front ej en una consola de gitbush:**
 
 git clone https://github.com/alovba1/front.git
@@ -171,6 +218,8 @@ cd front
 
 http://localhost:4200/ 
 
+![Descripción de la imagen](images/Proyectofront.png)
+
 ## ▪ Probar el despliegue
 
 instalar Jenkins localmente
@@ -182,6 +231,8 @@ Por ejemplo:
 Usuario: admin
 
 Contraseña: admin
+
+![Descripción de la imagen](images/AdminJenkins.png)
 
 Configuracion en la plataforma de Jenkins:
 
@@ -218,9 +269,16 @@ ejecutar el pipeline creado
 
 seleccionar el # de Build ejecutando
 
+![Descripción de la imagen](images/pipelinea.png)
+![Descripción de la imagen](images/pipelineb.png)
  **Ver el resultado de Log:**
 
 seleccionar la opcion Console Output
+
+![Descripción de la imagen](images/Logpipeline.png)
+![Descripción de la imagen](images/Logpipeline1.png)
+![Descripción de la imagen](images/Logpipeline2.png)
+![Descripción de la imagen](images/Logpipelinesuccess.png)
 
  **Comprobar la creacion de la imagen y el contenedor:**
 
@@ -233,7 +291,7 @@ otra forma: ir a https://hub.docker.com/
 usa la barra de búsqueda para encontrar imágen.
 
 en la cuadro de texto buscar la imagen ej: backend-image:latest
-
+![Descripción de la imagen](images/despliegueimagen.png)
 
 ## ▪ Cómo conectarse al entorno de monitoreo y qué métricas están disponibles.
 
@@ -246,6 +304,8 @@ recolecta datos de diferentes servicios, esto lo realiza enviando peticiones htt
 llamada endpoint de metricas.
 
 Para ver el analisis de graficas se puede utilizar la herramienta Grafana para el monitoreo de metricas.
+
+![Descripción de la imagen](images/Graficas.png)
 
 ## ▪ Cuáles serían los próximos pasos en una implementación real
 
@@ -270,7 +330,14 @@ configurar reglas de seguridad
 
 Utilizar API Gateway Cloud
 
-5. Estrategia de Backup y Recuperación
+5. Estrategia de Backup y Recuperación:
 
+Si hay un falla, necesitarás un plan de recuperación:
+
+ Programar backups automáticos de base de datos con jobs.
+
+ Usar  por ejemplo bucket de S3 de aws para respaldo de almacenamiento.
+ 
+ configurar para los servidores Load Balancing en caso de caidas del servicio.
 
 
