@@ -235,72 +235,42 @@ usa la barra de búsqueda para encontrar imágen.
 en la cuadro de texto buscar la imagen ej: backend-image:latest
 
 
-Editar
-./gradlew build
-Crea la imagen Docker:
+## ▪ Cómo conectarse al entorno de monitoreo y qué métricas están disponibles.
 
-bash
-Copiar
-Editar
-docker build -t mi-aplicacion .
-Despliega con Docker Compose:
+Para realizar el monitoreo de errores, alentas y verificar el rendimiento:
 
-bash
-Copiar
-Editar
-docker-compose up
-Accede a: http://localhost:8080
+Se puede usar la herramienta Prometheus.
 
-📈 Monitoreo y Métricas
-Accede a Grafana:
+recolecta datos de diferentes servicios, esto lo realiza enviando peticiones http a una url.
 
-URL: http://localhost:3000
+llamada endpoint de metricas.
 
-Usuario: admin
+Para ver el analisis de graficas se puede utilizar la herramienta Grafana para el monitoreo de metricas.
 
-Contraseña: admin
+## ▪ Cuáles serían los próximos pasos en una implementación real
 
-Paneles disponibles:
+1. Manejar el aumento de  en tráfico y escalabilidad conciderar husar Kubernetes en un ambien cloud ejemplo
 
-Uso de CPU y memoria
+Oracle Cloud, AzureDevOps, Aws etc..
+2. Configuración de CI/CD Despliegue totalmente Automático
 
-Latencia
+generacion de builds, despliegues en ambientes Dev, QA, Pre, Prod
 
-Errores por segundo
+3. Monitoreo errores y el rendimiento
 
-Disponibilidad
+Utilizar herramientas como Prometheus y Grafana
 
-🚀 Próximos Pasos
-Integrar pruebas de seguridad
+4. Implementación de Seguridad y Certificados SSL
 
-Despliegue en QA/Producción
+Implementar certificados de Seguridad SSL 
 
-Configurar rollback automático
+por ejemplo utilizar JWT Tokens para autenticación segura
 
-Añadir alertas
+configurar reglas de seguridad
 
-Escalamiento automático
+Utilizar API Gateway Cloud
 
-yaml
-Copiar
-Editar
+5. Estrategia de Backup y Recuperación
 
----
 
-### 💾 Paso 3: Guarda el archivo
-
-- En tu editor, presiona **Ctrl + S** (o **Cmd + S** en Mac) para guardar.
-
----
-
-### ✅ Paso 4: Verifica en GitHub (si aplica)
-
-Si estás trabajando en un repositorio en GitHub:
-
-1. Haz `commit` de los cambios:
-   ```bash
-   git add README.md
-   git commit -m "Actualiza estructura del README"
-   git push
-Ve a tu repositorio en GitHub y verás el nuevo formato en la página principal.
 
