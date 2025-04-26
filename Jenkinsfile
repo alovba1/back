@@ -52,7 +52,7 @@ stage('Run Tests') {
             }
         }
 
-        // Eliminar "taskkill" porque Jest ya está cerrando el servidor en afterAll()
+       
     }
 }
 

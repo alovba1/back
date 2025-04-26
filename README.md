@@ -339,6 +339,7 @@ Para ver el analisis de graficas se puede utilizar la herramienta Grafana para e
 1. Manejar el aumento de  en tráfico y escalabilidad conciderar husar Kubernetes en un ambien cloud ejemplo
 
 Oracle Cloud, AzureDevOps, Aws etc..
+
 2. Configuración de CI/CD Despliegue totalmente Automático
 
 generacion de builds, despliegues en ambientes Dev, QA, Pre, Prod
@@ -349,11 +350,11 @@ Utilizar herramientas como Prometheus y Grafana
 
 4. Implementación de Seguridad y Certificados SSL
 
-Implementar certificados de Seguridad SSL 
+Implementar certificados de Seguridad SSL (Secure Sockets Layer)
 
 por ejemplo utilizar JWT Tokens para autenticación segura
 
-configurar reglas de seguridad
+configurar reglas de seguridad en Nginx(Servidor web,proxi,load balancig)
 
 Utilizar API Gateway Cloud
 

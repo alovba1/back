@@ -1,3 +1,4 @@
 funciona test unitarios
 se genero pipeline en Jenkins exitoso
-y genera el al imagen y el contendor en dockerhub
+y genera la imagen y el contendor en dockerhub
+back node js y front es carpeta front y esta en angular 
